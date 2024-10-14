@@ -497,7 +497,7 @@ export const generateWAMessageContent = async(
 	if('edit' in message) {
 		m = {
 			protocolMessage: {
-				key: message.edit,
+				key: message.edit!,
 				editedMessage: m,
 				timestampMs: Date.now(),
 				type: WAProto.Message.ProtocolMessage.Type.MESSAGE_EDIT
