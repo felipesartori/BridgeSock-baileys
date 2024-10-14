@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "build": "npm run fetch && npm run compile",
+    "compile": "npm run compile:js && npm run compile:ts",
+    "compile:js": "pbjs -t static-module --sparse -w commonjs -o ../WAProto/index.js ../WAProto/WAProto.proto",
+    "compile:ts": "pbts -o ../WAProto/index.d.ts ../WAProto/index.js",
+    "fetch": "node index.js"
   },
   "dependencies": {
     "acorn": "^6.4.1",
