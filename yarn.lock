@@ -2575,11 +2575,6 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
-curve25519-js@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.npmjs.org/curve25519-js/-/curve25519-js-0.0.4.tgz"
-  integrity sha512-axn2UMEnkhyDUPWOwVKBMVIzSQy2ejH2xRGy1wq81dqRwApXfIzfbE3hIX0ZRFBIihf/KDqK158DLwESu4AK1w==
-
 dargs@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/dargs/-/dargs-7.0.0.tgz"
@@ -5168,11 +5163,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"libsignal@github:WhiskeySockets/libsignal-node":
-  version "2.0.1"
-  resolved "git+ssh://git@github.com/WhiskeySockets/libsignal-node.git#83a3e3a3864511cb74df1b796373f0d49d071134"
+"libsignal@github:bridgewpp-team/libsignal-node":
+  version "2.0.9"
+  resolved "git+ssh://git@github.com/bridgewpp-team/libsignal-node.git#5ec2647315e5b19751925212157753655653f18a"
   dependencies:
-    curve25519-js "^0.0.4"
     protobufjs "6.8.8"
 
 lines-and-columns@^1.1.6:
@@ -7532,7 +7526,7 @@ ts-jest@^27.1.5:
     semver "7.x"
     yargs-parser "20.x"
 
-ts-node@^10.9.2, ts-node@>=9.0.0:
+ts-node@^10.8.1, ts-node@>=9.0.0:
   version "10.9.2"
   resolved "https://registry.npmjs.org/ts-node/-/ts-node-10.9.2.tgz"
   integrity sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==
