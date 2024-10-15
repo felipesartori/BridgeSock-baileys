@@ -310,7 +310,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 
 		const { user, server } = jidDecode(jid)!
 		const isGroup = server === 'g.us'
-		msgId = msgId || generateMessageID()
+		msgId = msgId || generateMessageID(sock.user?.id)
 		useUserDevicesCache = useUserDevicesCache !== false
 
 		const participants: BinaryNode[] = []

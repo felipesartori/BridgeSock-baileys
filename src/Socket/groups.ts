@@ -182,7 +182,7 @@ export const makeGroupsSocket = (config: SocketConfig) => {
 				{
 					key: {
 						remoteJid: inviteMessage.groupJid,
-						id: generateMessageID(),
+						id: generateMessageID(sock.user?.id),
 						fromMe: false,
 						participant: key.remoteJid,
 					},
