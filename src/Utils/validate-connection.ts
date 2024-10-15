@@ -65,6 +65,10 @@ export const generateLoginNode = (userJid: string, config: ClientPayloadConfig):
 	return proto.ClientPayload.fromObject(payload)
 }
 
+const getPlatformType = (platform: string): proto.DeviceProps.PlatformType => {
+	const platformType = platform.toUpperCase()
+	return proto.DeviceProps.PlatformType[platformType] || proto.DeviceProps.PlatformType.DESKTOP
+}
 export const generateRegistrationNode = (
 	{ registrationId, signedPreKey, signedIdentityKey }: SignalCreds,
 	config: ClientPayloadConfig
@@ -83,8 +87,7 @@ export const generateRegistrationNode = (
 			secondary: +(browserVersion[1] || 1),
 			tertiary: +(browserVersion[2] || 0),
 		},
-		platformType: proto.DeviceProps.PlatformType[config.browser[1].toUpperCase()]
-			|| proto.DeviceProps.PlatformType.UNKNOWN,
+		platformType: getPlatformType(config.browser[1]),
 		requireFullSync: config.syncFullHistory,
 	}
 
