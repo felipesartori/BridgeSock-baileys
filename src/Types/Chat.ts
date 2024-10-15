@@ -2,6 +2,8 @@ import type { proto } from '../../WAProto'
 import type { AccountSettings } from './Auth'
 import type { BufferedEventData } from './Events'
 import type { MinimalMessage } from './Message'
+import type { ChatLabelAssociationActionBody } from './LabelAssociation'
+import type { MessageLabelAssociationActionBody } from './LabelAssociation'
 
 /** privacy settings in WhatsApp Web */
 export type WAPrivacyValue = 'all' | 'contacts' | 'contact_blacklist' | 'none'
@@ -90,6 +92,11 @@ export type ChatModification =
         lastMessages: LastMessageList
     }
     | { delete: true, lastMessages: LastMessageList }
+    // Label assosiation
+    | { addChatLabel: ChatLabelAssociationActionBody }
+    | { removeChatLabel: ChatLabelAssociationActionBody }
+    | { addMessageLabel: MessageLabelAssociationActionBody }
+    | { removeMessageLabel: MessageLabelAssociationActionBody }
 
 export type InitialReceivedChatsState = {
     [jid: string]: {

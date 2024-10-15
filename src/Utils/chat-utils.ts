@@ -8,6 +8,7 @@ import { aesDecrypt, aesEncrypt, hkdf, hmacSign } from './crypto'
 import { toNumber } from './generics'
 import { LT_HASH_ANTI_TAMPERING } from './lt-hash'
 import { downloadContentFromMessage, } from './messages-media'
+import { ChatLabelAssociation, LabelAssociationType, MessageLabelAssociation } from '../Types/LabelAssociation'
 
 type FetchAppStateSyncKey = (keyId: string) => Promise<proto.Message.IAppStateSyncKeyData | null | undefined>
 
@@ -606,7 +607,70 @@ export const chatModificationToAppPatch = (
 			apiVersion: 1,
 			operation: OP.SET,
 		}
-	} else {
+	}else if ('addChatLabel' in mod) {
+		patch = {
+			syncAction: {
+				labelAssociationAction: {
+					labeled: true,
+				}
+			},
+			index: [LabelAssociationType.Chat, mod.addChatLabel.labelId, jid],
+			type: 'regular',
+			apiVersion: 3,
+			operation: OP.SET,
+		}
+	} else if ('removeChatLabel' in mod) {
+		patch = {
+			syncAction: {
+				labelAssociationAction: {
+					labeled: false,
+				}
+			},
+			index: [LabelAssociationType.Chat, mod.removeChatLabel.labelId, jid],
+			type: 'regular',
+			apiVersion: 3,
+			operation: OP.SET,
+		}
+	} else if ('addMessageLabel' in mod) {
+		patch = {
+			syncAction: {
+				labelAssociationAction: {
+					labeled: true,
+				}
+			},
+			index: [
+				LabelAssociationType.Message,
+				mod.addMessageLabel.labelId,
+				jid,
+				mod.addMessageLabel.messageId,
+				'0',
+				'0'
+			],
+			type: 'regular',
+			apiVersion: 3,
+			operation: OP.SET,
+		}
+	} else if ('removeMessageLabel' in mod) {
+		patch = {
+			syncAction: {
+				labelAssociationAction: {
+					labeled: false,
+				}
+			},
+			index: [
+				LabelAssociationType.Message,
+				mod.removeMessageLabel.labelId,
+				jid,
+				mod.removeMessageLabel.messageId,
+				'0',
+				'0'
+			],
+			type: 'regular',
+			apiVersion: 3,
+			operation: OP.SET,
+		}
+	}
+	else {
 		throw new Boom('not supported')
 	}
 
@@ -731,6 +795,33 @@ export const processSyncAction = (
 		if(!isInitialSync) {
 			ev.emit('chats.delete', [id])
 		}
+	} else if (action?.labelEditAction) {
+		const { name, color, deleted, predefinedId } = action.labelEditAction!
+		ev.emit('labels.edit', {
+			id,
+			name: name!,
+			color: color!,
+			deleted: deleted!,
+			predefinedId: predefinedId ? String(predefinedId) : undefined
+		})
+	} else if (action?.labelAssociationAction) {
+		ev.emit('labels.association', {
+			type: action.labelAssociationAction.labeled
+				? 'add'
+				: 'remove',
+			association: type === LabelAssociationType.Chat
+				? {
+					type: LabelAssociationType.Chat,
+					chatId: syncAction.index[2],
+					labelId: syncAction.index[1]
+				} as ChatLabelAssociation
+				: {
+					type: LabelAssociationType.Message,
+					chatId: syncAction.index[2],
+					messageId: syncAction.index[3],
+					labelId: syncAction.index[1]
+				} as MessageLabelAssociation
+		})
 	} else {
 		logger?.debug({ syncAction, id }, 'unprocessable update')
 	}
